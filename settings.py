@@ -2,6 +2,12 @@ ES_INDEX = 'geo_data'
 ES_URL = 'http://127.0.0.1:9200'
 
 
+# Mappings define the filed types, so they can be properly indexed and searched
+# See: https://www.elastic.co/guide/en/elasticsearch/reference/6.1/mapping-types.html
+#
+# Note: ElasticSearch 6 also announced removal of mapping types,
+# see https://www.elastic.co/guide/en/elasticsearch/reference/6.1/removal-of-types.html
+
 city_mapping = {
     'properties': {
         '_type': {'index': 'not_analyzed', 'type': 'string'},
@@ -22,6 +28,8 @@ city_mapping = {
     },
 }
 
+# Completion suggester,
+# see https://www.elastic.co/guide/en/elasticsearch/reference/current/search-suggesters-completion.html
 _suggest_mapping = {
     'type': 'completion',
     'analyzer': 'default',
