@@ -8,26 +8,6 @@ ES_URL = 'http://127.0.0.1:9200'
 # Note: ElasticSearch 6 also announced removal of mapping types,
 # see https://www.elastic.co/guide/en/elasticsearch/reference/6.1/removal-of-types.html
 
-city_mapping = {
-    'properties': {
-        '_type': {'index': 'not_analyzed', 'type': 'string'},
-        'country': {
-            'properties': {
-                '_type': {'index': 'not_analyzed', 'type': 'string'},
-                'name': {'index': 'not_analyzed', 'type': 'string'},
-                'shortCode': {'index': 'not_analyzed', 'type': 'string'},
-            },
-        },
-        'region': {
-            'properties': {
-                '_type': {'index': 'not_analyzed', 'type': 'string'},
-                'name': {'index': 'not_analyzed', 'type': 'string'},
-            },
-        },
-        'name': {'index': 'not_analyzed', 'type': 'string'},
-    },
-}
-
 # Completion suggester,
 # see https://www.elastic.co/guide/en/elasticsearch/reference/current/search-suggesters-completion.html
 _suggest_mapping = {
@@ -76,6 +56,14 @@ geo_viewport_mapping = {
 }
 
 
+country_mapping = {
+    'properties': {
+        'name': {'index': 'not_analyzed', 'type': 'string'},
+        'isoCode': {'index': 'not_analyzed', 'type': 'string'},
+    },
+}
+
+
 mappings = {
     'cities': {
         'properties': {
@@ -83,13 +71,7 @@ mappings = {
             '__type': {'type': 'keyword'},
             '_suggest': _suggest_mapping,
             'alternativeNames': {'type': 'string'},
-            'country': {
-                'properties': {
-                    '_type': {'index': 'not_analyzed', 'type': 'string'},
-                    'name': {'index': 'not_analyzed', 'type': 'string'},
-                    'isoCode': {'index': 'not_analyzed', 'type': 'string'},
-                },
-            },
+            'country': country_mapping,
             'geoLocation': geo_location_maping,
             'geoPoint': geo_point_mapping,
             'geoViewport': geo_viewport_mapping,
@@ -118,7 +100,8 @@ mappings = {
             '__id': {'type': 'keyword'},
             '__type': {'type': 'keyword'},
             '_suggest': _suggest_mapping,
-            'city': city_mapping,
+            'country': country_mapping,
+            'city': {'type': 'string'},
             'geoLocation': geo_location_maping,
             'geoPoint': geo_point_mapping,
             'geoViewport': geo_viewport_mapping,
