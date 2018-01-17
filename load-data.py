@@ -34,7 +34,6 @@ def load_data(es):
     #     id=str(item['geonameid']),
     #     body=json.dupms(item),
     # )
-    # ans = True
 
 
 def prepare_suggester_input(inputs):
@@ -48,6 +47,7 @@ def prepare_suggester_input(inputs):
 def get_countries():
     file_name = os.path.join('data', 'countryInfo.txt')
     with open(file_name) as csv_file:
+        # See the list of fields in the countryInfo.txt
         fieldnames = [
             'iso', 'iso3', 'iso_numeric', 'fips', 'name',
             'capital', 'area', 'population', 'continent',
