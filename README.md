@@ -20,4 +20,5 @@ The data is downloaded from the http://www.geonames.org/ and contains the list o
 ## Reference
 
 [ElasticSearch Documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
+
 [Python Client Documentation](http://elasticsearch-py.readthedocs.io/en/master/api.html)
