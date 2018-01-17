@@ -82,7 +82,7 @@ mappings = {
             '__id': {'type': 'keyword'},
             '__type': {'type': 'keyword'},
             '_suggest': _suggest_mapping,
-            'alternativeNamesText': {'type': 'string'},
+            'alternativeNames': {'type': 'string'},
             'country': {
                 'properties': {
                     '_type': {'index': 'not_analyzed', 'type': 'string'},
@@ -94,12 +94,6 @@ mappings = {
             'geoPoint': geo_point_mapping,
             'geoViewport': geo_viewport_mapping,
             'name': {'type': 'string'},
-            'region': {
-                'properties': {
-                    '_type': {'index': 'not_analyzed', 'type': 'string'},
-                    'name': {'index': 'not_analyzed', 'type': 'string'},
-                },
-            },
         },
     },
     'countries': {
