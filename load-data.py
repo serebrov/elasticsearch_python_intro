@@ -4,12 +4,16 @@ import csv
 # import unicodecsv
 
 from elasticsearch import Elasticsearch, helpers as es_helpers
+from elasticsearch.exceptions import NotFoundError
 import settings
 
 
 def recreate_index():
     es = Elasticsearch([settings.ES_URL])
-    es.indices.delete(index=settings.ES_INDEX)
+    try:
+        es.indices.delete(index=settings.ES_INDEX)
+    except NotFoundError:
+        pass
     es.indices.create(index=settings.ES_INDEX, body=settings.index_settings)
     return es
 
