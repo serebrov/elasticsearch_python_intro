@@ -19,7 +19,7 @@ def search_text(es, index, query):
                         "_type": _type,
                     },
                     "field": "_suggest",
-                    # "size": g.query['offset'] + g.query['limit'],
+                    "size": 20,
                     "fuzzy": {
                         "fuzziness": 1,
                         "min_length": 5,
