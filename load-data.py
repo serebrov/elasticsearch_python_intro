@@ -21,7 +21,7 @@ def load_data(es):
         data.append({
             '_index': settings.ES_INDEX,
             '_id': str(item['geonameid']),
-            '_type': 'country',
+            '_type': 'countries',
             '_source': json.dumps(item),
         })
     es_helpers.bulk(es, data)
@@ -30,11 +30,19 @@ def load_data(es):
     #
     # es.index(
     #     index=ES_INDEX,
-    #     doc_type='country',
+    #     doc_type='countries',
     #     id=str(item['geonameid']),
     #     body=json.dupms(item),
     # )
     # ans = True
+
+
+def prepare_suggester_input(inputs):
+    result = []
+    for item in inputs:
+        if item:
+            result.append(item)
+    return result
 
 
 def get_countries():
@@ -54,6 +62,19 @@ def get_countries():
             dialect='excel-tab')  # , encoding='utf-8')
 
         for row in reader:
+            context = {
+                '_type': ['all', 'countries'],
+            }
+            row['_suggest'] = {
+                'contexts': context,
+                'input': prepare_suggester_input([
+                    row['name'],
+                    row['capital'],
+                    row['currency_name'],
+                    row['currency_code'],
+                ]),
+                'weight': row['population'],
+            }
             yield row
 
 
