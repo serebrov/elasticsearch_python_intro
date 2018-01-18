@@ -1,4 +1,11 @@
+# Ignore everything under /data except what was explicitly added.
+data
+
+# Downloaded ElasticSearch installation.
 elasticsearch
-.mypy_cache
+
+# Python and mypy cache, venv, tags, etc.
 __pycache__
+.mypy_cache
 venv
+.python.tags
