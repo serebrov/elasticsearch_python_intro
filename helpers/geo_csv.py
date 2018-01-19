@@ -37,6 +37,7 @@ geo_fieldnames = [
 def get_countries(file_name):
     data = read_file(file_name, country_fieldnames)
     for row in data:
+        row['type'] = 'countries'
         context = {
             '_type': ['all', 'countries'],
         }
@@ -56,8 +57,9 @@ def get_countries(file_name):
 def get_geo_objects(file_name):
     data = read_file(file_name, geo_fieldnames)
     for row in data:
+        row['type'] = 'geo-objects'
         context = {
-            '_type': ['all', 'points-of-interest'],
+            '_type': ['all', 'geo-objects'],
         }
         row['_suggest'] = {
             'contexts': context,

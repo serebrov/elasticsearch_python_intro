@@ -71,6 +71,7 @@ mappings = {
     'countries': {
         'properties': {
             '_suggest': _suggest_mapping,
+            'type': {'type': 'keyword'},
             'geonameid': {'type': 'keyword'},
             # 'geoLocation': geo_location_maping,
             # 'geoPoint': geo_point_mapping,
@@ -87,6 +88,7 @@ mappings = {
     'geo-objects': {
         'properties': {
             '_suggest': _suggest_mapping,
+            'type': {'type': 'keyword'},
             'geonameid': {'type': 'keyword'},
             'name': {'type': 'string'},
             'feature_class': {'type': 'string'},
