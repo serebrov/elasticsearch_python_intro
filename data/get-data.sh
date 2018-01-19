@@ -1,13 +1,20 @@
 #!/usr/bin/env bash
 set -e
+SCRIPT_PATH=`dirname $0`
 
 # Download all countries data
 wget --continue http://download.geonames.org/export/dump/allCountries.zip
 unzip -o allCountries.zip
 
+pushd $SCRIPT_PATH
+
 echo "Filtering the geo data..."
 # Filter all data to keep only the geo objects we want to have
-cat allCountries.txt | awk '
+cat allCountries.txt | 
+awk '
+    BEGIN { FS="\t" }
+    $18 ~ /Europe.+/ { print }
+' | awk '
     BEGIN { FS="\t" }
     $7 "." $8 ~ "H.FISH"  ||  #  fishing area	a fishing ground, bank or area where fishermen go to catch fish
     $7 "." $8 ~ "H.FLLS"  ||  #  waterfall(s)	a perpendicular or very steep descent of the water of a stream
@@ -53,3 +60,5 @@ cat allCountries.txt | awk '
 echo 'Done'
 ls -lah allCountries.txt
 ls -lah geoObjects.txt
+
+popd
