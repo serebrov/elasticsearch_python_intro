@@ -7,6 +7,9 @@ ES_URL = 'http://127.0.0.1:9200'
 #
 # Note: ElasticSearch 6 also announced removal of mapping types,
 # see https://www.elastic.co/guide/en/elasticsearch/reference/6.1/removal-of-types.html
+#     https://www.elastic.co/blog/kibana-6-removal-of-mapping-types
+# We can have unified structure, with one document type "geoobject", where the specific
+# data is stored in the 'city' / 'country', 'point-of-interest' sub-object.
 
 # Completion suggester,
 # see https://www.elastic.co/guide/en/elasticsearch/reference/current/search-suggesters-completion.html
@@ -65,24 +68,10 @@ country_mapping = {
 
 
 mappings = {
-    'cities': {
-        'properties': {
-            '__id': {'type': 'keyword'},
-            '__type': {'type': 'keyword'},
-            '_suggest': _suggest_mapping,
-            'alternativeNames': {'type': 'string'},
-            'country': country_mapping,
-            'geoLocation': geo_location_maping,
-            'geoPoint': geo_point_mapping,
-            'geoViewport': geo_viewport_mapping,
-            'name': {'type': 'string'},
-        },
-    },
     'countries': {
         'properties': {
-            'geonameid': {'type': 'keyword'},
-            '__type': {'type': 'keyword'},
             '_suggest': _suggest_mapping,
+            'geonameid': {'type': 'keyword'},
             # 'geoLocation': geo_location_maping,
             # 'geoPoint': geo_point_mapping,
             # 'geoViewport': geo_viewport_mapping,
@@ -95,13 +84,15 @@ mappings = {
             'iso': {'index': 'not_analyzed', 'type': 'string'},
         },
     },
-    'points-of-interest': {
+    'geo-objects': {
         'properties': {
-            '__id': {'type': 'keyword'},
-            '__type': {'type': 'keyword'},
             '_suggest': _suggest_mapping,
-            'country': country_mapping,
-            'city': {'type': 'string'},
+            'geonameid': {'type': 'keyword'},
+            'name': {'type': 'string'},
+            'feature_class': {'type': 'string'},
+            'feature_code': {'type': 'string'},
+            'country_code': {'type': 'string'},
+            'population': {'type': 'integer'},
             'geoLocation': geo_location_maping,
             'geoPoint': geo_point_mapping,
             'geoViewport': geo_viewport_mapping,

@@ -1,11 +1,10 @@
 import os
 import json
-import csv
-# import unicodecsv
 
 from elasticsearch import Elasticsearch, helpers as es_helpers
 from elasticsearch.exceptions import NotFoundError
 import settings
+from helpers import geo_csv
 
 
 def recreate_index():
@@ -19,16 +18,35 @@ def recreate_index():
 
 
 def load_data(es):
-    data = []
-    countries = get_countries()
-    for item in countries:
-        data.append({
+    # Load countries.
+    file_name = os.path.join('data', 'countryInfo.txt')
+    countries = geo_csv.get_countries(file_name)
+    save_geo_data(es, countries, 'countries')
+
+    # Load cities.
+    file_name = os.path.join('data', 'cities15000.txt')
+    cities = geo_csv.get_geo_objects(file_name)
+    save_geo_data(es, cities, 'geo-objects')
+
+    # Load points of interest.
+    file_name = os.path.join('data', 'geoObjects.txt')
+    geo_objects = geo_csv.get_geo_objects(file_name)
+    save_geo_data(es, geo_objects, 'geo-objects')
+
+
+def save_geo_data(es, data, data_type):
+    bulk_data = []
+    for item in data:
+        bulk_data.append({
             '_index': settings.ES_INDEX,
             '_id': str(item['geonameid']),
-            '_type': 'countries',
+            '_type': data_type,
             '_source': json.dumps(item),
         })
-    es_helpers.bulk(es, data)
+        if len(bulk_data) % 1000 == 0:
+            es_helpers.bulk(es, bulk_data)
+            bulk_data = []
+    es_helpers.bulk(es, bulk_data)
 
     # Single doc example:
     #
@@ -38,48 +56,6 @@ def load_data(es):
     #     id=str(item['geonameid']),
     #     body=json.dupms(item),
     # )
-
-
-def prepare_suggester_input(inputs):
-    result = []
-    for item in inputs:
-        if item:
-            result.append(item)
-    return result
-
-
-def get_countries():
-    file_name = os.path.join('data', 'countryInfo.txt')
-    with open(file_name) as csv_file:
-        # See the list of fields in the countryInfo.txt
-        fieldnames = [
-            'iso', 'iso3', 'iso_numeric', 'fips', 'name',
-            'capital', 'area', 'population', 'continent',
-            'tld', 'currency_code', 'currency_name',
-            'phone', 'postal_code_format', 'postal_code_regex',
-            'languages', 'geonameid', 'neighbours',
-            'equivalent_fips_code'
-        ]
-        reader = csv.DictReader(
-            (line for line in csv_file if not line.startswith('#')),
-            fieldnames=fieldnames,
-            dialect='excel-tab')  # , encoding='utf-8')
-
-        for row in reader:
-            context = {
-                '_type': ['all', 'countries'],
-            }
-            row['_suggest'] = {
-                'contexts': context,
-                'input': prepare_suggester_input([
-                    row['name'],
-                    row['capital'],
-                    row['currency_name'],
-                    row['currency_code'],
-                ]),
-                'weight': row['population'],
-            }
-            yield row
 
 
 def main():
