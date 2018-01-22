@@ -46,6 +46,28 @@ Reunion, capital: Saint-Denis, currency: Euro
 Montenegro, capital: Podgorica, currency: Euro
 ```
 
+5. Search by geo location using `python search-by-geo-location.py {longitude} {latitude}`.
+
+For example (London):
+
+```text
+(venv) $ python search-by-geo-location.py 51.51 -0.13
+(geo-objects) London Dungeon, type: S.MUS, positing: 51.5027,-0.1194
+(geo-objects) Sherlock Holmes Museum, type: S.MUS, positing: 51.52378,-0.15856
+(geo-objects) Monument to the Great Fire of London, type: S.MNMT, positing: 51.51014,-0.08594
+(geo-objects) The View from the Shard, type: S.OBPT, positing: 51.50449,-0.08691
+(geo-objects) Ripley's Believe It Or Not!, type: S.MUS, positing: 51.51018,-0.13386
+(geo-objects) The Serpentine, type: H.PND, positing: 51.50524,-0.16643
+(geo-objects) Churchill War Rooms, type: S.MUS, positing: 51.50186,-0.12912
+(geo-objects) Nelson's Column, type: S.MNMT, positing: 51.50777,-0.12792
+(geo-objects) Kennington Park, type: L.PRK, positing: 51.48423,-0.10865
+(geo-objects) Round Pond, type: H.PND, positing: 51.506,-0.18317
+(geo-objects) The Long Water, type: H.PND, positing: 51.50954,-0.17527
+(geo-objects) The Royal Parks, type: L.PRK, positing: 51.50828,-0.1652
+(geo-objects) Kensington Palace Green, type: L.PRK, positing: 51.5041,-0.18905
+...
+```
+
 ## Reference
 
 [ElasticSearch Documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
