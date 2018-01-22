@@ -2,11 +2,15 @@ import argparse
 from elasticsearch import Elasticsearch
 import settings
 
-# Kiev: python search-by-geo-location.py 50.53 30.46
+# Kiev:
+#   python search-by-geo-location.py 50.53 30.46
+# London:
+#   python search-by-geo-location.py 51.51 -0.13
 
 
 def search_geo(es, index, latitude, longitude):
 
+    search_delta = 0.1
     _type = ['geo-objects']
 
     # We search using "geo_bounding_box" query:
@@ -27,10 +31,10 @@ def search_geo(es, index, latitude, longitude):
     #
     #                    South
     #
-    top_left_lat = latitude + 0.1
-    top_left_lon = longitude - 0.1
-    bottom_right_lat = latitude - 0.1
-    bottom_right_lon = longitude + 0.1
+    top_left_lat = latitude + search_delta
+    top_left_lon = longitude - search_delta
+    bottom_right_lat = latitude - search_delta
+    bottom_right_lon = longitude + search_delta
 
     query = {
         "query": {
